@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Home\AboutController;
+use App\Http\Controllers\Home\HomeSlideController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -31,11 +33,21 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-Route::controller(AdminController::class)->group(function(){
-   Route::get('/admin/logout','destroy')->name('admin.logout');
-   Route::get('/admin/profile','profile')->name('admin.profile');
-   Route::get('/edit/profile','editProfile')->name('edit.profile');
-   Route::post('/store/profile','storeProfile')->name('store.profile');
-   Route::get('/change/password','changePassword')->name('change.password');
-   Route::post('/update/profile','updatePassword')->name('update.password');
+Route::controller(AdminController::class)->group(function () {
+    Route::get('/admin/logout', 'destroy')->name('admin.logout');
+    Route::get('/admin/profile', 'profile')->name('admin.profile');
+    Route::get('/edit/profile', 'editProfile')->name('edit.profile');
+    Route::post('/store/profile', 'storeProfile')->name('store.profile');
+    Route::get('/change/password', 'changePassword')->name('change.password');
+    Route::post('/update/profile', 'updatePassword')->name('update.password');
+});
+
+Route::controller(HomeSlideController::class)->group(function () {
+    Route::get('/home/slider', 'HomeSlider')->name('home.slide');
+    Route::get('/update/slide', 'UpdateSlider')->name('update.slider');
+});
+
+Route::controller(AboutController::class)->group(function (){
+   Route::get('/about/page','aboutPage')->name('about.page');
+   Route::post('/update/page','AboutPage')->name('update.about');
 });

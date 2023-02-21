@@ -10,8 +10,6 @@ use Illuminate\Support\Facades\Response;
 
 class AdminController extends Controller
 {
-
-
     /**
      * Destroy an authenticated session.
      */
@@ -34,13 +32,15 @@ class AdminController extends Controller
     public function profile()
     {
         $adminData = \auth()->user();
-        return Response::view('admin.admin_profile_view',compact('adminData'));
+
+        return Response::view('admin.admin_profile_view', compact('adminData'));
     }
 
     public function editProfile()
     {
         $editData = \auth()->user();
-        return Response::view('admin.admin_profile_edit',compact('editData'));
+
+        return Response::view('admin.admin_profile_edit', compact('editData'));
     }
 
     public function StoreProfile(Request $request)
@@ -50,10 +50,10 @@ class AdminController extends Controller
         $data->email = $request->email;
         $data->password = $request->password;
 
-        if ($request->file('profile_image')){
+        if ($request->file('profile_image')) {
             $file = $request->file('profile_image');
             $filename = date('YmdHi').$file->getClientOriginalName();
-            $file->move(public_path('upload/admin_images'),$filename);
+            $file->move(public_path('upload/admin_images'), $filename);
             $data->profile_image = $filename;
         }
 
@@ -75,7 +75,7 @@ class AdminController extends Controller
     public function updatePassword(Request $request)
     {
         $validateData = $request->validate([
-           'oldpassword' => 'required',
+            'oldpassword' => 'required',
             'newpassword' => 'required',
             'confirm_password' => 'required|same:newpassword',
         ]);
@@ -83,14 +83,16 @@ class AdminController extends Controller
         $user = \auth()->user();
         $hashedPassword = $user->password;
 
-        if(Hash::check($validateData['oldpassword'],$hashedPassword)){
+        if (Hash::check($validateData['oldpassword'], $hashedPassword)) {
             $user->password = bcrypt($validateData['newpassword']);
-            $user-> save();
+            $user->save();
 
-            session()->flash('success','password Updated Successfully');
-            return redirect()->back();
-        }else {
             session()->flash('success', 'password Updated Successfully');
+
+            return redirect()->back();
+        } else {
+            session()->flash('success', 'password Updated Successfully');
+
             return redirect()->back();
         }
     }
